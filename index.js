@@ -72,7 +72,7 @@ class EZStore {
                 this.setRedis(collectionName, recordId, hashKey),
                 this.setMemDB(collectionName, recordId, hashKey)
             ]);
-        } else if(await hasMongoPromise)){
+        } else if(await hasMongoPromise){
             value = await this.getMongo(collectionName, recordId, hashKey);
             await Promise.all([
                 this.setLowDB(collectionName, recordId, hashKey),
