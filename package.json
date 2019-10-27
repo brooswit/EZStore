@@ -1,0 +1,23 @@
+{
+  "name": "ezstore",
+  "version": "1.0.0",
+  "description": "Simple store. Mix and use multiple store types. In-memory, flat-file, Redis, or Mongo.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brooswit/EZStore.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brooswit/EZStore/issues"
+  },
+  "homepage": "https://github.com/brooswit/EZStore#readme",
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "lowdb": "^1.0.0"
+  }
+}
