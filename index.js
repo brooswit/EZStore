@@ -9,7 +9,7 @@ const mongo = require('mongodb').MongoClient;
 
 
 class EZStore {
-    constructor(databaseName, defaults={}, {
+    constructor(databaseName, {
         memDBEnabled  = null,
         redisEnabled  = null,
             redisUrl  = null,
@@ -18,25 +18,25 @@ class EZStore {
         mongoEnabled  = null,
             mongoUrl  = 'mongodb://localhost:27017'
     }) {
+        assert.notEqual(undefined, databaseName);
         if (memDBEnabled && redisEnabled) {
             memDBEnabled = false;
         }
 
         if (memDBEnabled) {
             this.memory = {};
-            _.defaults(this.memory, defaults);
+            // _.defaults(this.memory, defaults);
         }
         if (redisEnabled) {
             this.redis = redis.createClient({
                 url: redisUrl,
                 db: databaseName,
             });
-            // todo: defaults
         }
         if (lowBDEnabled) {
             const adapter = new FileSync(lowDBPath);
             this.lowDB = lowDB(adapter);
-            this.lowDB.defaults(defaults);
+            // this.lowDB.defaults(defaults);
         }
         if (mongoEnabled) {
             this._mongoReadyPromise = asyncly((done) => {
@@ -52,6 +52,7 @@ class EZStore {
 
 ////////////////////////////////////////////////////////////////////////////////
     async get(collectionName, recordId, hashKey) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
         assert.notEqual(undefined, collectionName);
         assert.notEqual(undefined, recordId);
         assert.notEqual(undefined, hashKey);
@@ -86,10 +87,18 @@ class EZStore {
         return value;
     }
     async getMemDB(collectionName, recordId, hashKey) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
+        assert.notEqual(undefined, collectionName);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
         if (!this.memDBEnabled) return undefined;
         return _.get(this.memory, [collectionName, recordId, hashKey]);
     }
     async getRedis(collectionName, recordId, hashKey) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
+        assert.notEqual(undefined, collectionName);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
         if (!this.redisEnabled) return undefined;
 
         return await asyncly(async (done) => {
@@ -100,10 +109,18 @@ class EZStore {
         });
     }
     async getLowDB(collectionName, recordId, hashKey) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
+        assert.notEqual(undefined, collectionName);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
         if (!this.lowDBEnabled) return undefined;
         return this.lowDB.get(this.memory, [collectionName, recordId, hashKey]);
     }
     async getMongo(collectionName, recordId, hashKey) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
+        assert.notEqual(undefined, collectionName);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
         if (!this.mongoEnabled) return undefined;
         this.mongo.collection(collectionName).find({
             id: recordId
@@ -116,52 +133,11 @@ class EZStore {
 
 
 ////////////////////////////////////////////////////////////////////////////////
-    async has(collectionName, recordId, hashKey) {
-        assert.notEqual(undefined, collectionName);
-        assert.notEqual(undefined, id);
-        assert.notEqual(undefined, key);
-
-        const hasMemDBPromise = this.hasMemDB(collectionm, recordId, hashKey);
-        const hasRedisPromise = this.hasRedis(collectionm, recordId, hashKey);
-        const hasLowDBPromise = this.hasLowDB(collectionm, recordId, hashKey);
-        const hasMongoPromise = this.hasMongo(collectionm, recordId, hashKey);
-
-        return await hasMemDBPromise === !undefined ? await hasMemDBPromise :
-            await hasRedisPromise === !undefined ? await hasRedisPromise :
-            await hasLowDBPromise === !undefined ? await hasLowDBPromise :
-            await hasMongoPromise === !undefined ? await hasMongoPromise : false;
-    }
-    async hasMemDB(collectionName, recordId, hashKey) {
-        if (!this.memDBEnabled) return undefined;
-        return _.has(this.memory, [collectionName, recordId, hashKey]);
-    }
-    async hasRedis(collectionName, recordId, hashKey) {
-        if (!this.redisEnabled) return undefined;
-        // TODO:
-        // [] Research redis "has"-like method support
-        // [] Use redis has
-        const value = await this.getRedis(collectionName, recordId, hashKey);
-        return value !== null;
-    }
-    async hasLowDB(collectionName, recordId, hashKey) {
-        if (!this.lowDBEnabled) return undefined;
-        return this.lowDB.has(this.memory, [collectionName, recordId, hashKey]);
-    }
-    async hasMongo(collectionName, recordId, hashKey) {
-        if (!this.mongoEnabled) return undefined;
-        // TODO:
-        // [] Research mongo "has"-like method support
-        // [] Use mongo has
-        const value = await this.getMongo(collectionName, recordId, hashKey);
-        return value !== null;
-    }
-
-
-////////////////////////////////////////////////////////////////////////////////
     async set(collectionName, recordId, hashKey, value) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
         assert.notEqual(undefined, collectionName);
-        assert.notEqual(undefined, id);
-        assert.notEqual(undefined, key);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
 
         const setMemDBPromise = this.setMemDB(collectionm, recordId, hashKey);
         const setRedisPromise = this.setRedis(collectionm, recordId, hashKey);
@@ -174,10 +150,18 @@ class EZStore {
         await setMongoPromise;
     }
     async setMemDB(collectionName, recordId, hashKey, value) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
+        assert.notEqual(undefined, collectionName);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
         if (!this.memDBEnabled) return undefined;
         return _.set(this.memory, [collectionName, recordId, hashKey], value);
     }
     async setRedis(collectionName, recordId, hashKey, value) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
+        assert.notEqual(undefined, collectionName);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
         if (!this.redisEnabled) return undefined;
         return await asyncly((done) => {
             this.redis.hset(`${collectionName}:${id}`, hashKey, value, (err, res) => {
@@ -187,10 +171,18 @@ class EZStore {
         });
     }
     async setLowDB(collectionName, recordId, hashKey, value) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
+        assert.notEqual(undefined, collectionName);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
         if (!this.lowDBEnabled) return undefined;
         return this.lowDB.set(this.memory, [collectionName, recordId, hashKey], value);
     }
     async setMongo(collectionName, recordId, hashKey, value) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
+        assert.notEqual(undefined, collectionName);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
         if (!this.mongoEnabled) return undefined;
         await asyncly(async (done) => {
             const patch = {};
@@ -204,6 +196,64 @@ class EZStore {
                 done();
             });
         });
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+    async has(collectionName, recordId, hashKey) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
+        assert.notEqual(undefined, collectionName);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
+
+        const hasMemDBPromise = this.hasMemDB(collectionm, recordId, hashKey);
+        const hasRedisPromise = this.hasRedis(collectionm, recordId, hashKey);
+        const hasLowDBPromise = this.hasLowDB(collectionm, recordId, hashKey);
+        const hasMongoPromise = this.hasMongo(collectionm, recordId, hashKey);
+
+        return await hasMemDBPromise === !undefined ? await hasMemDBPromise :
+            await hasRedisPromise === !undefined ? await hasRedisPromise :
+            await hasLowDBPromise === !undefined ? await hasLowDBPromise :
+            await hasMongoPromise === !undefined ? await hasMongoPromise : false;
+    }
+    async hasMemDB(collectionName, recordId, hashKey) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
+        assert.notEqual(undefined, collectionName);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
+        if (!this.memDBEnabled) return undefined;
+        return _.has(this.memory, [collectionName, recordId, hashKey]);
+    }
+    async hasRedis(collectionName, recordId, hashKey) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
+        assert.notEqual(undefined, collectionName);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
+        if (!this.redisEnabled) return undefined;
+        // TODO:
+        // [] Research redis "has"-like method support
+        // [] Use redis has
+        const value = await this.getRedis(collectionName, recordId, hashKey);
+        return value !== null;
+    }
+    async hasLowDB(collectionName, recordId, hashKey) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
+        assert.notEqual(undefined, collectionName);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
+        if (!this.lowDBEnabled) return undefined;
+        return this.lowDB.has(this.memory, [collectionName, recordId, hashKey]);
+    }
+    async hasMongo(collectionName, recordId, hashKey) {
+        console.warn(`${arguments.callee}: ${JSON.stringify(arguments)}`);
+        assert.notEqual(undefined, collectionName);
+        assert.notEqual(undefined, recordId);
+        assert.notEqual(undefined, hashKey);
+        if (!this.mongoEnabled) return undefined;
+        // TODO:
+        // [] Research mongo "has"-like method support
+        // [] Use mongo has
+        const value = await this.getMongo(collectionName, recordId, hashKey);
+        return value !== null;
     }
 }
 
