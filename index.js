@@ -54,10 +54,10 @@ class EZStore {
     async get(collectionName, recordId, hashKey) {
         logAndAssert(arguments);
 
-        const hasMemDBPromise = this.hasMemDB(collectionm, recordId, hashKey);
-        const hasRedisPromise = this.hasRedis(collectionm, recordId, hashKey);
-        const hasLowDBPromise = this.hasLowDB(collectionm, recordId, hashKey);
-        const hasMongoPromise = this.hasMongo(collectionm, recordId, hashKey);
+        const hasMemDBPromise = this.hasMemDB(collectionName, recordId, hashKey);
+        const hasRedisPromise = this.hasRedis(collectionName, recordId, hashKey);
+        const hasLowDBPromise = this.hasLowDB(collectionName, recordId, hashKey);
+        const hasMongoPromise = this.hasMongo(collectionName, recordId, hashKey);
 
         const value = undefined;
 
@@ -121,10 +121,10 @@ class EZStore {
     async set(collectionName, recordId, hashKey, value) {
         logAndAssert(arguments);
 
-        const setMemDBPromise = this.setMemDB(collectionm, recordId, hashKey);
-        const setRedisPromise = this.setRedis(collectionm, recordId, hashKey);
-        const setLowDBPromise = this.setLowDB(collectionm, recordId, hashKey);
-        const setMongoPromise = this.setMongo(collectionm, recordId, hashKey);
+        const setMemDBPromise = this.setMemDB(collectionName, recordId, hashKey);
+        const setRedisPromise = this.setRedis(collectionName, recordId, hashKey);
+        const setLowDBPromise = this.setLowDB(collectionName, recordId, hashKey);
+        const setMongoPromise = this.setMongo(collectionName, recordId, hashKey);
 
         await setMemDBPromise;
         await setRedisPromise;
@@ -172,10 +172,10 @@ class EZStore {
     async has(collectionName, recordId, hashKey) {
         logAndAssert(arguments);
 
-        const hasMemDBPromise = this.hasMemDB(collectionm, recordId, hashKey);
-        const hasRedisPromise = this.hasRedis(collectionm, recordId, hashKey);
-        const hasLowDBPromise = this.hasLowDB(collectionm, recordId, hashKey);
-        const hasMongoPromise = this.hasMongo(collectionm, recordId, hashKey);
+        const hasMemDBPromise = this.hasMemDB(collectionName, recordId, hashKey);
+        const hasRedisPromise = this.hasRedis(collectionName, recordId, hashKey);
+        const hasLowDBPromise = this.hasLowDB(collectionName, recordId, hashKey);
+        const hasMongoPromise = this.hasMongo(collectionName, recordId, hashKey);
 
         return await hasMemDBPromise === !undefined ? await hasMemDBPromise :
             await hasRedisPromise === !undefined ? await hasRedisPromise :
