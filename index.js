@@ -26,17 +26,20 @@ class EZStore {
         if (memDBEnabled) {
             this.memory = {};
             // _.defaults(this.memory, defaults);
+            console.warn("memDB Enabled");
         }
         if (redisEnabled) {
             this.redis = redis.createClient({
                 url: redisUrl,
                 db: databaseName,
             });
+            console.warn("redis Enabled");
         }
         if (lowBDEnabled) {
             const adapter = new FileSync(lowDBPath);
             this.lowDB = lowDB(adapter);
             // this.lowDB.defaults(defaults);
+            console.warn("lowDB Enabled");
         }
         if (mongoEnabled) {
             this._mongoReadyPromise = asyncly((done) => {
@@ -46,6 +49,7 @@ class EZStore {
                     done();
                 });
             });
+            console.warn("mongo Enabled");
         }
     }
 
