@@ -222,7 +222,7 @@ class EZStore {
 }
 
 function logAndAssert(args) {
-        console.warn(`${args.callee}: ${JSON.stringify(args)}`);
+        // console.warn(`${args.callee}: ${JSON.stringify(args)}`);
         assert.notEqual(undefined, args[0]);
         assert.notEqual(undefined, args[1]);
         assert.notEqual(undefined, args[2]);
