@@ -94,7 +94,9 @@ class EZStore {
     async getMemDB(collectionName, recordId, hashKey) {
         logAndAssert(arguments);
         if (!this.memDBEnabled) return undefined;
-        return _.get(this.memory, [collectionName, recordId, hashKey]);
+        return this.memory[collectionName] &&
+            this.memory[collectionName][recordId] &&
+            this.memory[collectionName][recordId][hashKey];
     }
     async getRedis(collectionName, recordId, hashKey) {
         logAndAssert(arguments);
