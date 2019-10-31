@@ -138,6 +138,11 @@ class EZStore {
     async setMemDB(collectionName, recordId, hashKey, value) {
         logAndAssert(arguments);
         if (!this.memDBEnabled) return undefined;
+        let defaults = {};
+        defaults[collectionName] = {};
+        defaults[collectionName][recordId] = {};
+
+        _.defaultsDeep(this.memory, defaults);
         return _.set(this.memory, [collectionName, recordId, hashKey], value);
     }
     async setRedis(collectionName, recordId, hashKey, value) {
@@ -217,7 +222,7 @@ class EZStore {
 }
 
 function logAndAssert(args) {
-        // console.warn(`${args.callee}: ${JSON.stringify(args)}`);
+        console.warn(`${args.callee}: ${JSON.stringify(args)}`);
         assert.notEqual(undefined, args[0]);
         assert.notEqual(undefined, args[1]);
         assert.notEqual(undefined, args[2]);
