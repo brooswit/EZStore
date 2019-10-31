@@ -139,8 +139,6 @@ class EZStore {
         console.log("setMemDB");
         let step=0;
         console.log({step}); step++;
-        logAndAssert(arguments);
-        console.log({step}); step++;
         if (!this.memDBEnabled) return console.log('memDB Disabled');
         console.log({step}); step++;
         let defaults = {};
