@@ -142,23 +142,14 @@ class EZStore {
         await setMongoPromise;
     }
     async setMemDB(collectionName, recordId, hashKey, value) {
-        console.log("setMemDB");
         let step=0;
-        console.log({step}); step++;
-        console.log(this.memDBEnabled);
 
-        if (!this.memDBEnabled) return console.log('memDB Disabled');
+        if (!this.memDBEnabled) return;
 
-        console.log({step}); step++;
         let defaults = {};
-        console.log({step}); step++;
         this.memory[collectionName] = this.memory[collectionName] || {};
-        console.log({step}); step++;
         this.memory[collectionName][recordId] = this.memory[collectionName][recordId] || {};
-        console.log({step}); step++;
-        _.set(this.memory, [collectionName, recordId, hashKey], value);
-        console.log({step}); step++;
-        console.log(JSON.stringify(this.memory));
+        this.memory[collectionName][recordId][hashKey] = value;
         return;
     }
     async setRedis(collectionName, recordId, hashKey, value) {
