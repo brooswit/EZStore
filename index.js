@@ -67,7 +67,7 @@ class EZStore {
         const hasLowDBPromise = this.hasLowDB(collectionName, recordId, hashKey);
         const hasMongoPromise = this.hasMongo(collectionName, recordId, hashKey);
 
-        const value = undefined;
+        let value = undefined;
 
         if(await hasMemDBPromise){
             value = await this.getMemDB(collectionName, recordId, hashKey);
