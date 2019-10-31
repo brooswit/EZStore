@@ -18,9 +18,9 @@ class EZStore {
         mongoEnabled  = null,
             mongoUrl  = 'mongodb://localhost:27017'
     }) {
-        assert.notEqual(undefined, databaseName);
         if (memDBEnabled && redisEnabled) {
             memDBEnabled = false;
+            console.warn('cannot enable both redis and memDB');
         }
 
         if (memDBEnabled) {
