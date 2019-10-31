@@ -25,7 +25,6 @@ class EZStore {
 
         if (memDBEnabled) {
             this.memory = {};
-            // _.defaults(this.memory, defaults);
             console.warn("memDB Enabled");
         }
         if (redisEnabled) {
@@ -139,7 +138,10 @@ class EZStore {
         console.log("setMemDB");
         let step=0;
         console.log({step}); step++;
+        console.log(this.memDBEnabled);
+
         if (!this.memDBEnabled) return console.log('memDB Disabled');
+
         console.log({step}); step++;
         let defaults = {};
         console.log({step}); step++;
