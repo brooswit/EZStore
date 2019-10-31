@@ -139,10 +139,10 @@ class EZStore {
         logAndAssert(arguments);
         if (!this.memDBEnabled) return undefined;
         let defaults = {};
-        defaults[collectionName] = {};
-        defaults[collectionName][recordId] = {};
-
-        _.defaultsDeep(this.memory, defaults);
+        this.memory[collectionName] = this.memory[collectionName] || {};
+        this.memory[collectionName][recordId] = this.memory[collectionName][recordId] || {};
+        _.set(this.memory, [collectionName, recordId, hashKey], value);
+        console.log(JSON.stringify(this.memory));
         return _.set(this.memory, [collectionName, recordId, hashKey], value);
     }
     async setRedis(collectionName, recordId, hashKey, value) {
