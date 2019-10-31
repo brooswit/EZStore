@@ -18,6 +18,11 @@ class EZStore {
         mongoEnabled  = null,
             mongoUrl  = 'mongodb://localhost:27017'
     }) {
+        this.memDBEnabled = memDBEnabled;
+        this.redisEnabled = redisEnabled;
+        this.lowBDEnabled = lowBDEnabled;
+        this.mongoEnabled = mongoEnabled;
+
         if (memDBEnabled && redisEnabled) {
             memDBEnabled = false;
             console.warn('cannot enable both redis and memDB');
